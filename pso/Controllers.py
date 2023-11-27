@@ -77,7 +77,7 @@ class BinaryParticleController:
         # Get Differences of vector
         hdist = spp.distance.hamming(model._position, self._solution)
         # Save it as best position if its better than previous best
-        if hdist < model._fitness or model._fitness is None:
+        if model._fitness is None or hdist < model._fitness:
             model._bestPosition = np.copy(model._position)
             model._fitness = hdist
 
@@ -217,13 +217,13 @@ class SwarmController:
     
     def __init__(self, type, solution):
         # Initialize ParticleController
-        if type is "continuous":
+        if type == "continuous":
             self._particleController = ParticleController(solution)
-        elif type is "binary":
+        elif type == "binary":
             self._particleController = BinaryParticleController(solution)            
-        elif type is "knapsack":
+        elif type == "knapsack":
             self._particleController = KnapsackParticleController(solution)            
-        elif type is "tsp":
+        elif type == "tsp":
             self._particleController = TSPParticleController(solution)      
                   
         # Initialize NeighbourhoodController
@@ -261,9 +261,9 @@ class SwarmController:
 class NeighbourhoodController:    
 
     def initNeighbourhoods(self, swarm, topology = "gbest"):
-        if topology is "gbest":
+        if topology == "gbest":
             return [NeighbourhoodModel(swarm._particles)]
-        elif topology is "lbest":
+        elif topology == "lbest":
             neighbourhoods = []
             for idx, curParticle in enumerate(swarm._particles):
                 previousParticle = None
