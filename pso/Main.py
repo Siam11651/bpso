@@ -11,8 +11,8 @@ from PSOProblems import *
 
 # problem = CPSOProblem("lbest")
 # problem = CPSOProblem("gbest")
-problem = CBPSOProblem("gbest")
-# problem = BPSOKnapsackProblem()
+# problem = CBPSOProblem("lbest")
+problem = BPSOKnapsackProblem()
 # problem = BPSOTSPProblem()
 
 problem.plotResults()

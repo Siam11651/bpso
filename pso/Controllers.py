@@ -120,7 +120,7 @@ class KnapsackParticleController(BinaryParticleController):
         # Create Velocity array
         model._velocity = np.random.randint(2, size = dimensions)
         # Save best Position so far as current Position
-        model._bestPosition = np.zeros((dimensions,), dtype = np.int)
+        model._bestPosition = np.zeros((dimensions,), dtype = np.int8)
         #print model._bestPosition
         self.updateFitness(model)
 
@@ -132,7 +132,7 @@ class KnapsackParticleController(BinaryParticleController):
                 curWeight += weight
                 curValue += price
 
-        if curWeight != 0 and curWeight <= self._solution._knapsackSize and (1 / float(curValue) < model._fitness or model._fitness is None):
+        if curWeight != 0 and curWeight <= self._solution._knapsackSize and (model._fitness is None or 1 / float(curValue) < model._fitness):
             model._fitness = 1 / float(curValue) 
             model._bestPosition = np.copy(model._position)
             #self._solution._resValue = curValue
@@ -210,7 +210,7 @@ class TSPParticleController(BinaryParticleController):
 #===============================================================================
 # Swarm Controller
 #===============================================================================
-class SwarmController:    
+class SwarmController:
 
     _particleController = None
     _neighbourhoodController = None
@@ -234,7 +234,7 @@ class SwarmController:
         for i in range(nParticles):
             newParticle = ParticleModel()
             self._particleController.initParticle(newParticle, dimensions)
-            swarm._particles.append(newParticle)    
+            swarm._particles.append(newParticle)
         swarm._neighbourhoods = self._neighbourhoodController.initNeighbourhoods(swarm, topology)
         self.updateSwarmBestPosition(swarm)
             
@@ -268,11 +268,11 @@ class NeighbourhoodController:
             for idx, curParticle in enumerate(swarm._particles):
                 previousParticle = None
                 nextParticle = None
-                if idx is 0:
+                if idx == 0:
                     # Previous is last, next is next
                     nextParticle = swarm._particles[idx + 1]
                     previousParticle = swarm._particles[len(swarm._particles) - 1]
-                elif idx is len(swarm._particles) - 1:
+                elif idx == len(swarm._particles) - 1:
                     # Previous is previous, next is first
                     nextParticle = swarm._particles[0]
                     previousParticle = swarm._particles[idx - 1]
@@ -286,7 +286,7 @@ class NeighbourhoodController:
     def updateNeighbourhoodBestPosition(self, model):
         # Find the best one in the NB
         for curParticle in model._particles:
-            if model._bestPositionFitness is None or (curParticle._fitness < model._bestPositionFitness and curParticle._fitness is not None):
+            if model._bestPositionFitness == None or (curParticle._fitness != None and curParticle._fitness < model._bestPositionFitness):
                 model._bestPositionFitness = curParticle._fitness
                 model._bestPosition = np.copy(curParticle._bestPosition)
 
