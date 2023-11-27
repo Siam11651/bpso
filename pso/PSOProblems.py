@@ -36,7 +36,7 @@ class PSOProblem(object):
         self._topology = topology
     
     def printResult(self):
-        print "PSOProblem Result:"
+        print("PSOProblem Result:")
 
     def plotResults(self):
 #        print self._plotPoints
@@ -62,7 +62,7 @@ class PSOProblem(object):
 class CPSOProblem(PSOProblem):
 
     def __init__(self, topology="gbest"):
-        print "\nProblem Solving: Continuous"
+        print("\nProblem Solving: Continuous")
         # Problem parameters
         solution1 = [42.123, 12, 490, -20]
         solution2 = [42]
@@ -90,24 +90,24 @@ class CPSOProblem(PSOProblem):
             fit = 500 - swarm._bestPositionFitness
             self._plotPoints.append( (gen, fit) )
             
-            print "Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness
+            print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
             sc.updateSwarm(swarm)
         
 #        print solution, swarm._bestPosition, swarm._bestPositionFitness
 
-        print "\n==================================================================="
-        print "Dimensions:\t", dimensions
-        print "Solution:\t", np.array(solution)
-        print "Best Result:\t", swarm._bestPosition
-        print "Best Fitness:\t", 500 - swarm._bestPositionFitness
-        print "==================================================================="
+        print("\n===================================================================")
+        print("Dimensions:\t", dimensions)
+        print("Solution:\t", np.array(solution))
+        print("Best Result:\t", swarm._bestPosition)
+        print("Best Fitness:\t", 500 - swarm._bestPositionFitness)
+        print("===================================================================")
 
 
 #---- Continuous Binary PSO Problem
 class CBPSOProblem(PSOProblem):
 
     def __init__(self, topology="gbest"):
-        print "\nProblem Solving: Binary"
+        print("\nProblem Solving: Binary")
         # Problem parameters
         solution1 = pow([2], 3)
         solution2 = [1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -139,15 +139,15 @@ class CBPSOProblem(PSOProblem):
             fit = dimensions - (dimensions * swarm._bestPositionFitness)
             self._plotPoints.append( (gen, fit) )
 #            self._plotPoints += (i+1, 1 - swarm._bestPositionFitness)
-            print "Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness
+            print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
         
-        print "\n==================================================================="
-        print "Dimensions:\t", dimensions
-        print "Solution:\t", np.array(solution)
-        print "Best Result:\t", swarm._bestPosition
-        print "Best Fitness:\t", 1 - swarm._bestPositionFitness, "in %d" % idx, " iteration out of %d" % generations
-        print "Number of bits out of place: %d" % (dimensions * swarm._bestPositionFitness)
-        print "==================================================================="
+        print("\n===================================================================")
+        print("Dimensions:\t", dimensions)
+        print("Solution:\t", np.array(solution))
+        print("Best Result:\t", swarm._bestPosition)
+        print("Best Fitness:\t", 1 - swarm._bestPositionFitness, "in %d" % idx, " iteration out of %d" % generations)
+        print("Number of bits out of place: %d" % (dimensions * swarm._bestPositionFitness))
+        print("===================================================================")
         
     def plotResults(self):
 #        print self._plotPoints
@@ -172,7 +172,7 @@ class BPSOKnapsackProblem(PSOProblem):
         __KNAPSACK_WEIGHTS_1 = [(4, 12), (2, 2), (2, 1), (10, 4), (1, 1)]
         
         def __init__(self):
-            print "\nProblem Solving: Combinatorial - Knapsack"
+            print("\nProblem Solving: Combinatorial - Knapsack")
             knapsackSize = 16
             solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
             popSize     = 50
@@ -194,17 +194,17 @@ class BPSOKnapsackProblem(PSOProblem):
                 if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
                     fitness = swarm._bestPositionFitness
                     idx = i
-                print "Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness
+                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
             
             result = self.getKnapsackResult(solution._items, swarm._bestPosition)
             
-            print "\n==================================================================="
-            print "Number of weights:\t", dimensions, "\nKnapsackSize:\t\t", knapsackSize, " kg"
-            print "Solution Found:\t\t(", result[0], "$,", result[1], "kg)"
-            print "Best Result:\t\t", swarm._bestPosition, " -> ", result[2]
-            print "Best Fitness:\t\t", swarm._bestPositionFitness, "in %d" % idx, "th iteration out of %d" % generations
-            print "Size left in knapsack: \t%d kg" % (knapsackSize - result[1])
-            print "==================================================================="
+            print("\n===================================================================")
+            print("Number of weights:\t", dimensions, "\nKnapsackSize:\t\t", knapsackSize, " kg")
+            print("Solution Found:\t\t(", result[0], "$,", result[1], "kg)")
+            print("Best Result:\t\t", swarm._bestPosition, " -> ", result[2])
+            print("Best Fitness:\t\t", swarm._bestPositionFitness, "in %d" % idx, "th iteration out of %d" % generations)
+            print("Size left in knapsack: \t%d kg" % (knapsackSize - result[1]))
+            print("===================================================================")
     
         def getKnapsackResult(self, items, bestPosition):
                 res = ""
@@ -232,7 +232,7 @@ class BPSOTSPProblem(PSOProblem):
     __GRAPH_6 = { ("A", "Z") : 75, ("A", "S") : 140, ("Z", "O") : 71,  ("O", "S") : 151,  ("A", "T") : 118, ("S", "F") : 99, ("T", "L") : 111, ("F", "B") : 211, ("L", "M") : 70, ("D", "C") : 120, ("M", "D") : 75, ("S", "R") : 80, ("R", "C") : 146, ("C", "P") : 138, ("R", "P") : 97, ("P", "B") : 101, ("B", "G") : 90, ("B", "U") : 85, ("N", "I") : 87, ("U", "V") : 142, ("I", "V") : 92, ("E", "H") : 86, ("U", "H") : 98}
     
     def __init__(self):        
-        print "\nProblem Solving: Combinatorial - TSP"
+        print("\nProblem Solving: Combinatorial - TSP")
         graph       = self.generateFullGraph(self.__GRAPH_3)
         numOfCities = 4
         solution    = TSPSolutionModel(graph, numOfCities, "A")
@@ -254,17 +254,17 @@ class BPSOTSPProblem(PSOProblem):
             if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
                 fitness = swarm._bestPositionFitness
                 idx = i
-            print "Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness
+            print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
         
-        print "\n==================================================================="
-        print "Number of edges:\t", dimensions / 2, "\nNum of cities:\t\t", numOfCities
+        print("\n===================================================================")
+        print("Number of edges:\t", dimensions / 2, "\nNum of cities:\t\t", numOfCities)
         if swarm._bestPositionFitness is not None:
             path = self.getTSPResult(solution, swarm._bestPosition)
-            print "Best Result:\t\t", swarm._bestPosition, " Path: ", path
-            print "Best Length:\t\t", swarm._bestPositionFitness, "in %d" % idx, " iteration out of %d" % generations
+            print("Best Result:\t\t", swarm._bestPosition, " Path: ", path)
+            print("Best Length:\t\t", swarm._bestPositionFitness, "in %d" % idx, " iteration out of %d" % generations)
         else:
-            print "Path was not found"
-        print "==================================================================="   
+            print("Path was not found")
+        print("===================================================================")
         
         
     def generateFullGraph(self, graph):

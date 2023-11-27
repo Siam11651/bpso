@@ -39,7 +39,7 @@ class ParticleController:
         # Get Norm of diff vector
         newFitness = np.linalg.norm(diff)
         # Save it as best position if its better than previous best
-        if newFitness < model._fitness or model._fitness is None:
+        if model._fitness is None or newFitness < model._fitness:
             model._bestPosition = np.copy(model._position)
             model._fitness = newFitness
 
