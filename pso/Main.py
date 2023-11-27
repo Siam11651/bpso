@@ -15,4 +15,4 @@ from PSOProblems import *
 problem = BPSOKnapsackProblem()
 # problem = BPSOTSPProblem()
 
-problem.plotResults()
+# problem.plotResults()

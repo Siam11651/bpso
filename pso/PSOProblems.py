@@ -198,25 +198,28 @@ class BPSOKnapsackProblem(PSOProblem):
             
             result = self.getKnapsackResult(solution._items, swarm._bestPosition)
             
-            print("\n===================================================================")
-            print("Number of weights:\t", self._dimensions, "\nKnapsackSize:\t\t", knapsackSize, " kg")
-            print("Solution Found:\t\t(", result[0], "$,", result[1], "kg)")
-            print("Best Result:\t\t", swarm._bestPosition, " -> ", result[2])
-            print("Best Fitness:\t\t", swarm._bestPositionFitness, "in %d" % idx, "th iteration out of %d" % self._generations)
-            print("Size left in knapsack: \t%d kg" % (knapsackSize - result[1]))
+            print("===================================================================")
+            print(f"Number of weights:\t{self._dimensions}")
+            print(f"KnapsackSize:\t\t{knapsackSize} kg")
+            print(f"Solution Found:\t\t({result[0]} $, {result[1]}kg)")
+            print(f"Best Result:\t\t{swarm._bestPosition} -> {result[2]}")
+            print(f"Best Fitness:\t\t{swarm._bestPositionFitness} in {idx}th iteration out of {self._generations}")
+            print(f"Size left in knapsack:\t{(knapsackSize - result[1])} kg")
             print("===================================================================")
     
         def getKnapsackResult(self, items, bestPosition):
                 res = ""
                 curValue = 0
                 curWeight = 0
+                appended = False
                 for idx, (price, weight) in enumerate(items):
                     if bestPosition[idx] == 1:
                         curValue += price
                         curWeight += weight
-                        if idx != 0:
+                        if appended:
                             res += ", "
-                        res += "(%d $$, %d kg)" % (price, weight)
+                        res += f"({price} $$, {weight} kg)"
+                        appended = True
                 return (curValue, curWeight, res)
 
 
