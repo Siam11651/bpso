@@ -107,6 +107,38 @@ class BinaryParticleController:
         return 1.0/(1.0 + np.exp(-(x)))
 
 #===============================================================================
+# Time Variant Binary Particle controller
+#===============================================================================
+class TimeVariantBinaryParticleController(BinaryParticleController):
+    def updatePosition(self, model):
+        # VELOCITY NEEDS TO BE CONSTRICTED WITH VMAX
+        # Get random coefficients e1 & e2
+        c = 2.5
+        e1 = np.random.rand()
+        e2 = np.random.rand()
+        vlow = -100
+        vhigh = 100
+        iteration_count = len(model._velocity)
+
+        # Apply equation to each component of the velocity, add it to corresponding position component
+        for i, velocity in enumerate(model._velocity):
+            vmax = vlow + (i * (vhigh - vlow)) / iteration_count
+            velocity = velocity + c * e1 * (model._bestPosition[i] - model._position[i]) + c * e2 * (model._nbBestPosition[i] - model._position[i])
+            if abs(velocity) > vmax and abs(velocity) is velocity: 
+                velocity = vmax
+            elif abs(velocity) > vmax:
+                velocity = -vmax
+            velocity = self.sigmoid(velocity)
+#            print "vel:", velocity
+            if np.random.rand(1) < velocity:
+                model._position[i] = 1
+            else:
+                model._position[i] = 0
+            
+    def sigmoid(self, x):
+        return 1.0/(1.0 + np.exp(-(x)))
+
+#===============================================================================
 # Knapsack Particle Controller
 #===============================================================================
 class KnapsackParticleController(BinaryParticleController):    
@@ -137,6 +169,37 @@ class KnapsackParticleController(BinaryParticleController):
             model._bestPosition = np.copy(model._position)
             #self._solution._resValue = curValue
             #self._solution._resWeight = curWeight 
+
+#===============================================================================
+# Time Variant Knapsack Particle Controller
+#===============================================================================
+class TimeVariantKnapsackParticleController \
+    (TimeVariantBinaryParticleController):    
+    
+    def __init__(self, solution):
+        self._solution = solution
+
+    def initParticle(self, model, dimensions):
+        # Create position array
+        model._position = np.random.randint(2, size = dimensions)
+        # Create Velocity array
+        model._velocity = np.random.randint(2, size = dimensions)
+        # Save best Position so far as current Position
+        model._bestPosition = np.zeros((dimensions,), dtype = np.int8)
+        #print model._bestPosition
+        self.updateFitness(model)
+
+    def updateFitness(self, model):
+
+        curWeight = curValue = 0
+        for idx, (price, weight) in enumerate(self._solution._items):
+            if model._position[idx] == 1:
+                curWeight += weight
+                curValue += price
+
+        if curWeight != 0 and curWeight <= self._solution._knapsackSize and (model._fitness is None or 1 / float(curValue) < model._fitness):
+            model._fitness = 1 / float(curValue) 
+            model._bestPosition = np.copy(model._position)
 
 #===============================================================================
 # TSP Particle Controller
@@ -220,9 +283,11 @@ class SwarmController:
         if type == "continuous":
             self._particleController = ParticleController(solution)
         elif type == "binary":
-            self._particleController = BinaryParticleController(solution)            
+            self._particleController = BinaryParticleController(solution)
         elif type == "knapsack":
-            self._particleController = KnapsackParticleController(solution)            
+            self._particleController = KnapsackParticleController(solution)
+        elif type == "tv_knapsack":
+            self._particleController = TimeVariantKnapsackParticleController(solution)
         elif type == "tsp":
             self._particleController = TSPParticleController(solution)      
                   

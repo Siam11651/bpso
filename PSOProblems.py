@@ -13,6 +13,8 @@
 
 
 #---- Required imports
+import pickle
+import random
 from Models import *
 from Controllers import *
 from PSOTestSuite import *
@@ -43,15 +45,15 @@ class PSOProblem(object):
         x = []
         y = []
         for (generation, fitness) in self._plotPoints:
-            x.append(fitness)
-            y.append(generation)
+            x.append(generation)
+            y.append(fitness)
 #            print "%.4f" % (fitness)
         pyl.plot(x, y)
         
         pyl.grid(True)
         pyl.title(f'Optimizing {self._dimensions}D Float Vector (Topology: {self._topology}) ')
-        pyl.xlabel('Fitness (f)')
-        pyl.ylabel('Generation (i)')
+        pyl.xlabel('Generation (i)')
+        pyl.ylabel('Fitness (f)')
         pyl.savefig('simple_plot')
 
         pyl.show()
@@ -154,8 +156,8 @@ class CBPSOProblem(PSOProblem):
         x = []
         y = []
         for (generation, fitness) in self._plotPoints:
-            x.append(fitness)
-            y.append(generation)
+            x.append(generation)
+            y.append(fitness)
 #            print "%d" % (fitness)
         pyl.plot(x, y)
         
@@ -169,11 +171,17 @@ class CBPSOProblem(PSOProblem):
         
 class BPSOKnapsackProblem(PSOProblem):
 
-        __KNAPSACK_WEIGHTS_1 = [(4, 12), (2, 2), (2, 1), (10, 4), (1, 1)]
+        # __KNAPSACK_WEIGHTS_1 = [(4, 12), (2, 2), (2, 1), (10, 4), (1, 1)]
+        file = open("dataset", mode="rb")
+        data = file.read()
+        data = pickle.loads(data)
+
+        # Combine profits and weights into tuples
+        __KNAPSACK_WEIGHTS_1 = data[1]
         
         def __init__(self):
             print("\nProblem Solving: Combinatorial - Knapsack")
-            knapsackSize = 16
+            knapsackSize = BPSOKnapsackProblem.data[0]
             solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
             self._popSize     = 50
             self._dimensions  = len(solution._items)
@@ -194,6 +202,9 @@ class BPSOKnapsackProblem(PSOProblem):
                 if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
                     fitness = swarm._bestPositionFitness
                     idx = i
+                
+                self._plotPoints.append((i, 1.0 - fitness))
+
                 print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
             
             result = self.getKnapsackResult(solution._items, swarm._bestPosition)
@@ -222,7 +233,70 @@ class BPSOKnapsackProblem(PSOProblem):
                         appended = True
                 return (curValue, curWeight, res)
 
+class TVBPSOKnapsackProblem(PSOProblem):
 
+        # __KNAPSACK_WEIGHTS_1 = [(4, 12), (2, 2), (2, 1), (10, 4), (1, 1)]
+
+        file = open("dataset", mode="rb")
+        data = file.read()
+        data = pickle.loads(data)
+
+        # Combine profits and weights into tuples
+        __KNAPSACK_WEIGHTS_1 = data[1]
+        
+        def __init__(self):
+            print("\nProblem Solving: Combinatorial - Knapsack")
+            knapsackSize = TVBPSOKnapsackProblem.data[0]
+            solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
+            self._popSize     = 50
+            self._dimensions  = len(solution._items)
+            self._generations = 100
+            self._topology    = "gbest"
+            
+            # Swarm Initialization
+            swarm   = SwarmModel()
+            sc      = SwarmController("tv_knapsack", solution)
+            sc.initSwarm(swarm, self._topology, self._popSize, self._dimensions)
+            
+            # Output Results
+            fitness = 1
+            idx     = 0
+            
+            for i in range(self._generations):
+                sc.updateSwarm(swarm)
+                if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
+                    fitness = swarm._bestPositionFitness
+                    idx = i
+
+                self._plotPoints.append((i + 1, 1.0 - fitness))
+
+                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
+            
+            result = self.getKnapsackResult(solution._items, swarm._bestPosition)
+            
+            print("===================================================================")
+            print(f"Number of weights:\t{self._dimensions}")
+            print(f"KnapsackSize:\t\t{knapsackSize} kg")
+            print(f"Solution Found:\t\t({result[0]} $, {result[1]}kg)")
+            print(f"Best Result:\t\t{swarm._bestPosition} -> {result[2]}")
+            print(f"Best Fitness:\t\t{swarm._bestPositionFitness} in {idx}th iteration out of {self._generations}")
+            print(f"Size left in knapsack:\t{(knapsackSize - result[1])} kg")
+            print("===================================================================")
+
+        def getKnapsackResult(self, items, bestPosition):
+                res = ""
+                curValue = 0
+                curWeight = 0
+                appended = False
+                for idx, (price, weight) in enumerate(items):
+                    if bestPosition[idx] == 1:
+                        curValue += price
+                        curWeight += weight
+                        if appended:
+                            res += ", "
+                        res += f"({price} $$, {weight} kg)"
+                        appended = True
+                return (curValue, curWeight, res)
 
 #---- TSP BPSO Problem
 class BPSOTSPProblem(PSOProblem):
