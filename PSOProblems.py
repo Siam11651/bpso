@@ -14,7 +14,6 @@
 
 #---- Required imports
 import pickle
-import random
 from Models import *
 from Controllers import *
 from PSOTestSuite import *
