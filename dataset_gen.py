@@ -2,7 +2,7 @@ import pickle
 import random
 
 if __name__ == "__main__":
-    filepath = "datasets/p08"
+    filepath = "datasets/ks16a"
     file = open(filepath + "/c.txt", mode="r")
     capacity = int(file.read())
 
