@@ -2,12 +2,29 @@ import pickle
 import random
 
 if __name__ == "__main__":
-    N = 1000
+    filepath = "datasets/p08"
+    file = open(filepath + "/c.txt", mode="r")
+    capacity = int(file.read())
 
-    # Generate profits and weights between 1 and 1000
-    profits = [random.randint(1, 1000) for _ in range(N)]
-    weights = [random.randint(1, 1000) for _ in range(N)]
-    data = pickle.dumps((500000, list(zip(profits, weights))))
+    file.close()
+
+    file = open(filepath + "/p.txt", mode="r")
+    profits = []
+
+    for line in file.readlines():
+        profits.append(int(line))
+    
+    file.close()
+
+    file = open(filepath + "/w.txt", mode="r")
+    weights = []
+
+    for line in file.readlines():
+        weights.append(int(line))
+    
+    file.close()
+
+    data = pickle.dumps((capacity, list(zip(profits, weights))))
     file = open("dataset", mode="wb")
 
     file.write(data)

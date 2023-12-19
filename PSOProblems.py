@@ -204,7 +204,7 @@ class BPSOKnapsackProblem(PSOProblem):
                 
                 self._plotPoints.append((i, 1.0 - fitness))
 
-                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
+                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", 1.0 - swarm._bestPositionFitness)
             
             result = self.getKnapsackResult(solution._items, swarm._bestPosition)
             
@@ -269,7 +269,7 @@ class TVBPSOKnapsackProblem(PSOProblem):
 
                 self._plotPoints.append((i + 1, 1.0 - fitness))
 
-                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", swarm._bestPositionFitness)
+                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", 1.0 - swarm._bestPositionFitness)
             
             result = self.getKnapsackResult(solution._items, swarm._bestPosition)
             

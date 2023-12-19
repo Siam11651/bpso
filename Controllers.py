@@ -116,8 +116,8 @@ class TimeVariantBinaryParticleController(BinaryParticleController):
         c = 2.5
         e1 = np.random.rand()
         e2 = np.random.rand()
-        vlow = -100
-        vhigh = 100
+        vlow = -6
+        vhigh = 6
         iteration_count = len(model._velocity)
 
         # Apply equation to each component of the velocity, add it to corresponding position component
