@@ -1,5 +1,4 @@
 import pickle
-import random
 
 if __name__ == "__main__":
     filepath = "datasets/ks16a"

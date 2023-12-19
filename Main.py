@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # problem = BPSOTSPProblem()
 
     # problem.plotResults()
-    print("time invariant...")
+    print("time invariant:")
     BPSOKnapsackProblem()
-    print("time variant...")
+    print("time variant:")
     TVBPSOKnapsackProblem()

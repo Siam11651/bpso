@@ -222,9 +222,7 @@ class BPSOKnapsackProblem(PSOProblem):
 
                 max_weight_sum += result[0]
 
-            print("===================================================================")
             print(f"average max weight ${max_weight_sum / 30}")
-            print("===================================================================")
     
         def getKnapsackResult(self, items, bestPosition):
                 res = ""
@@ -296,9 +294,7 @@ class TVBPSOKnapsackProblem(PSOProblem):
 
                 max_weight_sum += result[0]
 
-            print("===================================================================")
             print(f"average max weight ${max_weight_sum / 30}")
-            print("===================================================================")
 
         def getKnapsackResult(self, items, bestPosition):
                 res = ""

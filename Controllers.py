@@ -84,9 +84,11 @@ class BinaryParticleController:
     def updatePosition(self, model):
         # VELOCITY NEEDS TO BE CONSTRICTED WITH VMAX
         # Get random coefficients e1 & e2
-        c = 2.5
-        e1 = np.random.rand()
-        e2 = np.random.rand()
+        c = 2
+        # e1 = np.random.rand()
+        # e2 = np.random.rand()
+        e1 = 1
+        e2 = 1
         vmax = 6
         # Apply equation to each component of the velocity, add it to corresponding position component
         for i, velocity in enumerate(model._velocity):
@@ -113,27 +115,30 @@ class TimeVariantBinaryParticleController(BinaryParticleController):
     def updatePosition(self, model):
         # VELOCITY NEEDS TO BE CONSTRICTED WITH VMAX
         # Get random coefficients e1 & e2
-        c = 2.5
-        e1 = np.random.rand()
-        e2 = np.random.rand()
-        vlow = -6
-        vhigh = 6
-        iteration_count = len(model._velocity)
+        c = 2
+        # e1 = np.random.rand()
+        # e2 = np.random.rand()
+        e1 = 1
+        e2 = 1
+        vlow = 2
+        vhigh = 4
+        iteration_count = 5
 
-        # Apply equation to each component of the velocity, add it to corresponding position component
-        for i, velocity in enumerate(model._velocity):
-            vmax = vlow + (i * (vhigh - vlow)) / iteration_count
-            velocity = velocity + c * e1 * (model._bestPosition[i] - model._position[i]) + c * e2 * (model._nbBestPosition[i] - model._position[i])
-            if abs(velocity) > vmax and abs(velocity) is velocity: 
-                velocity = vmax
-            elif abs(velocity) > vmax:
-                velocity = -vmax
-            velocity = self.sigmoid(velocity)
-#            print "vel:", velocity
-            if np.random.rand(1) < velocity:
-                model._position[i] = 1
-            else:
-                model._position[i] = 0
+        for g in range(iteration_count):
+            vmax = vlow + (g * (vhigh - vlow)) / iteration_count
+            # Apply equation to each component of the velocity, add it to corresponding position component
+            for i, velocity in enumerate(model._velocity):
+                velocity = velocity + c * e1 * (model._bestPosition[i] - model._position[i]) + c * e2 * (model._nbBestPosition[i] - model._position[i])
+                if abs(velocity) > vmax and abs(velocity) is velocity: 
+                    velocity = vmax
+                elif abs(velocity) > vmax:
+                    velocity = -vmax
+                velocity = self.sigmoid(velocity)
+    #            print "vel:", velocity
+                if np.random.rand(1) < velocity:
+                    model._position[i] = 1
+                else:
+                    model._position[i] = 0
             
     def sigmoid(self, x):
         return 1.0/(1.0 + np.exp(-(x)))
