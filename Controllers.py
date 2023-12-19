@@ -13,6 +13,7 @@ from Models import NeighbourhoodModel
 
 import scipy.spatial as spp
 import numpy as np
+import random_starter as rs
 
 #===============================================================================
 # Particle controller
@@ -85,11 +86,11 @@ class BinaryParticleController:
         # VELOCITY NEEDS TO BE CONSTRICTED WITH VMAX
         # Get random coefficients e1 & e2
         c = 2
-        # e1 = np.random.rand()
-        # e2 = np.random.rand()
-        e1 = 1
-        e2 = 1
-        vmax = 6
+        e1 = np.random.rand()
+        e2 = np.random.rand()
+        # e1 = 1
+        # e2 = 1
+        vmax = 6.0
         # Apply equation to each component of the velocity, add it to corresponding position component
         for i, velocity in enumerate(model._velocity):
 #            velocity = 0.72984 * (velocity + c * e1 * (model._bestPosition[i] - model._position[i]) + c * e2 * (model._nbBestPosition[i] - model._position[i]))
@@ -116,13 +117,13 @@ class TimeVariantBinaryParticleController(BinaryParticleController):
         # VELOCITY NEEDS TO BE CONSTRICTED WITH VMAX
         # Get random coefficients e1 & e2
         c = 2
-        # e1 = np.random.rand()
-        # e2 = np.random.rand()
-        e1 = 1
-        e2 = 1
-        vlow = 2
-        vhigh = 4
-        iteration_count = 5
+        e1 = np.random.rand()
+        e2 = np.random.rand()
+        # e1 = 1
+        # e2 = 1
+        vlow = 0.0
+        vhigh = 6.0
+        iteration_count = 10
 
         for g in range(iteration_count):
             vmax = vlow + (g * (vhigh - vlow)) / iteration_count
@@ -153,9 +154,9 @@ class KnapsackParticleController(BinaryParticleController):
 
     def initParticle(self, model, dimensions):
         # Create position array
-        model._position = np.random.randint(2, size = dimensions)
+        model._position = np.copy(rs.random_starter.position)
         # Create Velocity array
-        model._velocity = np.random.randint(2, size = dimensions)
+        model._velocity = np.copy(rs.random_starter.velocity)
         # Save best Position so far as current Position
         model._bestPosition = np.zeros((dimensions,), dtype = np.int8)
         #print model._bestPosition
@@ -178,17 +179,15 @@ class KnapsackParticleController(BinaryParticleController):
 #===============================================================================
 # Time Variant Knapsack Particle Controller
 #===============================================================================
-class TimeVariantKnapsackParticleController \
-    (TimeVariantBinaryParticleController):    
-    
+class TimeVariantKnapsackParticleController(TimeVariantBinaryParticleController):
     def __init__(self, solution):
         self._solution = solution
 
     def initParticle(self, model, dimensions):
         # Create position array
-        model._position = np.random.randint(2, size = dimensions)
+        model._position = np.copy(rs.random_starter.position)
         # Create Velocity array
-        model._velocity = np.random.randint(2, size = dimensions)
+        model._velocity = np.copy(rs.random_starter.velocity)
         # Save best Position so far as current Position
         model._bestPosition = np.zeros((dimensions,), dtype = np.int8)
         #print model._bestPosition

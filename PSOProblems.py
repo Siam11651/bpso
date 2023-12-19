@@ -13,7 +13,7 @@
 
 
 #---- Required imports
-import pickle
+import math
 from Models import *
 from Controllers import *
 from PSOTestSuite import *
@@ -168,20 +168,12 @@ class CBPSOProblem(PSOProblem):
 
         pyl.show()
         
-class BPSOKnapsackProblem(PSOProblem):
-
-        # __KNAPSACK_WEIGHTS_1 = [(4, 12), (2, 2), (2, 1), (10, 4), (1, 1)]
-        file = open("dataset", mode="rb")
-        data = file.read()
-        data = pickle.loads(data)
-
-        # Combine profits and weights into tuples
-        __KNAPSACK_WEIGHTS_1 = data[1]
-        
-        def __init__(self):
+class BPSOKnapsackProblem(PSOProblem):        
+        def __init__(self, data):
             # print("\nProblem Solving: Combinatorial - Knapsack")
-            knapsackSize = BPSOKnapsackProblem.data[0]
-            solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
+            knapsackSize = data[0]
+            knapsack_weights = data[1]
+            solution = KnapsackSolutionModel(knapsack_weights, knapsackSize)
             self._popSize     = 50
             self._dimensions  = len(solution._items)
             self._generations = 100
@@ -193,6 +185,8 @@ class BPSOKnapsackProblem(PSOProblem):
             sc.initSwarm(swarm, self._topology, self._popSize, self._dimensions)
 
             max_weight_sum = 0
+            max_weight_min = math.inf
+            max_weight_max = 0
 
             for _ in range(30):
                 # Output Results
@@ -221,8 +215,12 @@ class BPSOKnapsackProblem(PSOProblem):
                 # print("===================================================================")
 
                 max_weight_sum += result[0]
+                max_weight_min = min(max_weight_min, result[0])
+                max_weight_max = max(max_weight_max, result[0])
 
-            print(f"average max weight ${max_weight_sum / 30}")
+            print(f"max weight avg ${max_weight_sum / 30}")
+            print(f"max weight min ${max_weight_min}")
+            print(f"max weight max ${max_weight_max}")
     
         def getKnapsackResult(self, items, bestPosition):
                 res = ""
@@ -239,21 +237,12 @@ class BPSOKnapsackProblem(PSOProblem):
                         appended = True
                 return (curValue, curWeight, res)
 
-class TVBPSOKnapsackProblem(PSOProblem):
-
-        # __KNAPSACK_WEIGHTS_1 = [(4, 12), (2, 2), (2, 1), (10, 4), (1, 1)]
-
-        file = open("dataset", mode="rb")
-        data = file.read()
-        data = pickle.loads(data)
-
-        # Combine profits and weights into tuples
-        __KNAPSACK_WEIGHTS_1 = data[1]
-        
-        def __init__(self):
+class TVBPSOKnapsackProblem(PSOProblem):        
+        def __init__(self, data):
             # print("\nProblem Solving: Combinatorial - Knapsack")
-            knapsackSize = TVBPSOKnapsackProblem.data[0]
-            solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
+            knapsackSize = data[0]
+            knapsack_weights = data[1]
+            solution = KnapsackSolutionModel(knapsack_weights, knapsackSize)
             self._popSize     = 50
             self._dimensions  = len(solution._items)
             self._generations = 100
@@ -265,6 +254,8 @@ class TVBPSOKnapsackProblem(PSOProblem):
             sc.initSwarm(swarm, self._topology, self._popSize, self._dimensions)
             
             max_weight_sum = 0
+            max_weight_min = math.inf
+            max_weight_max = 0
 
             for _ in range(30):
                 # Output Results
@@ -293,8 +284,12 @@ class TVBPSOKnapsackProblem(PSOProblem):
                 # print("===================================================================")
 
                 max_weight_sum += result[0]
+                max_weight_min = min(max_weight_min, result[0])
+                max_weight_max = max(max_weight_max, result[0])
 
-            print(f"average max weight ${max_weight_sum / 30}")
+            print(f"max weight avg ${max_weight_sum / 30}")
+            print(f"max weight min ${max_weight_min}")
+            print(f"max weight max ${max_weight_max}")
 
         def getKnapsackResult(self, items, bestPosition):
                 res = ""

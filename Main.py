@@ -1,3 +1,5 @@
+import pickle
+import random_starter as rs
 from PSOProblems import *
 
 if __name__ == "__main__":
@@ -9,7 +11,14 @@ if __name__ == "__main__":
     # problem = BPSOTSPProblem()
 
     # problem.plotResults()
+    file = open("dataset", mode="rb")
+    data = pickle.loads(file.read())
+
+    file.close()
+    rs.random_starter.start(len(data[1]))
+
     print("time invariant:")
-    BPSOKnapsackProblem()
+    BPSOKnapsackProblem(data)
+    print()
     print("time variant:")
-    TVBPSOKnapsackProblem()
+    TVBPSOKnapsackProblem(data)
