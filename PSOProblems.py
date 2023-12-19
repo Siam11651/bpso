@@ -179,7 +179,7 @@ class BPSOKnapsackProblem(PSOProblem):
         __KNAPSACK_WEIGHTS_1 = data[1]
         
         def __init__(self):
-            print("\nProblem Solving: Combinatorial - Knapsack")
+            # print("\nProblem Solving: Combinatorial - Knapsack")
             knapsackSize = BPSOKnapsackProblem.data[0]
             solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
             self._popSize     = 50
@@ -191,30 +191,39 @@ class BPSOKnapsackProblem(PSOProblem):
             swarm   = SwarmModel()
             sc      = SwarmController("knapsack", solution)
             sc.initSwarm(swarm, self._topology, self._popSize, self._dimensions)
-            
-            # Output Results
-            fitness = 1
-            idx     = 0
-            
-            for i in range(self._generations):
-                sc.updateSwarm(swarm)
-                if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
-                    fitness = swarm._bestPositionFitness
-                    idx = i
-                
-                self._plotPoints.append((i, 1.0 - fitness))
 
-                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", 1.0 - swarm._bestPositionFitness)
-            
-            result = self.getKnapsackResult(solution._items, swarm._bestPosition)
-            
+            max_weight_sum = 0
+
+            for _ in range(30):
+                # Output Results
+                fitness = 1
+                idx     = 0
+                
+                for i in range(self._generations):
+                    sc.updateSwarm(swarm)
+                    if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
+                        fitness = swarm._bestPositionFitness
+                        idx = i
+                    
+                    self._plotPoints.append((i, 1.0 - fitness))
+
+                    # print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", 1.0 - swarm._bestPositionFitness)
+                
+                result = self.getKnapsackResult(solution._items, swarm._bestPosition)
+                
+                # print("===================================================================")
+                # print(f"Number of weights:\t{self._dimensions}")
+                # print(f"KnapsackSize:\t\t{knapsackSize} kg")
+                # print(f"Solution Found:\t\t({result[0]} $, {result[1]}kg)")
+                # print(f"Best Result:\t\t{swarm._bestPosition} -> {result[2]}")
+                # print(f"Best Fitness:\t\t{1.0 - swarm._bestPositionFitness} in {idx}th iteration out of {self._generations}")
+                # print(f"Size left in knapsack:\t{(knapsackSize - result[1])} kg")
+                # print("===================================================================")
+
+                max_weight_sum += result[0]
+
             print("===================================================================")
-            print(f"Number of weights:\t{self._dimensions}")
-            print(f"KnapsackSize:\t\t{knapsackSize} kg")
-            print(f"Solution Found:\t\t({result[0]} $, {result[1]}kg)")
-            print(f"Best Result:\t\t{swarm._bestPosition} -> {result[2]}")
-            print(f"Best Fitness:\t\t{swarm._bestPositionFitness} in {idx}th iteration out of {self._generations}")
-            print(f"Size left in knapsack:\t{(knapsackSize - result[1])} kg")
+            print(f"average max weight ${max_weight_sum / 30}")
             print("===================================================================")
     
         def getKnapsackResult(self, items, bestPosition):
@@ -244,7 +253,7 @@ class TVBPSOKnapsackProblem(PSOProblem):
         __KNAPSACK_WEIGHTS_1 = data[1]
         
         def __init__(self):
-            print("\nProblem Solving: Combinatorial - Knapsack")
+            # print("\nProblem Solving: Combinatorial - Knapsack")
             knapsackSize = TVBPSOKnapsackProblem.data[0]
             solution = KnapsackSolutionModel(self.__KNAPSACK_WEIGHTS_1, knapsackSize)
             self._popSize     = 50
@@ -257,29 +266,38 @@ class TVBPSOKnapsackProblem(PSOProblem):
             sc      = SwarmController("tv_knapsack", solution)
             sc.initSwarm(swarm, self._topology, self._popSize, self._dimensions)
             
-            # Output Results
-            fitness = 1
-            idx     = 0
-            
-            for i in range(self._generations):
-                sc.updateSwarm(swarm)
-                if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
-                    fitness = swarm._bestPositionFitness
-                    idx = i
+            max_weight_sum = 0
 
-                self._plotPoints.append((i + 1, 1.0 - fitness))
+            for _ in range(30):
+                # Output Results
+                fitness = 1
+                idx     = 0
+                
+                for i in range(self._generations):
+                    sc.updateSwarm(swarm)
+                    if swarm._bestPositionFitness is not None and swarm._bestPositionFitness < fitness:
+                        fitness = swarm._bestPositionFitness
+                        idx = i
+                    
+                    self._plotPoints.append((i, 1.0 - fitness))
 
-                print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", 1.0 - swarm._bestPositionFitness)
-            
-            result = self.getKnapsackResult(solution._items, swarm._bestPosition)
-            
+                    # print("Generation", i+1,"\t-> BestPos:", swarm._bestPosition, "\tBestFitness:", 1.0 - swarm._bestPositionFitness)
+                
+                result = self.getKnapsackResult(solution._items, swarm._bestPosition)
+                
+                # print("===================================================================")
+                # print(f"Number of weights:\t{self._dimensions}")
+                # print(f"KnapsackSize:\t\t{knapsackSize} kg")
+                # print(f"Solution Found:\t\t({result[0]} $, {result[1]}kg)")
+                # print(f"Best Result:\t\t{swarm._bestPosition} -> {result[2]}")
+                # print(f"Best Fitness:\t\t{1.0 - swarm._bestPositionFitness} in {idx}th iteration out of {self._generations}")
+                # print(f"Size left in knapsack:\t{(knapsackSize - result[1])} kg")
+                # print("===================================================================")
+
+                max_weight_sum += result[0]
+
             print("===================================================================")
-            print(f"Number of weights:\t{self._dimensions}")
-            print(f"KnapsackSize:\t\t{knapsackSize} kg")
-            print(f"Solution Found:\t\t({result[0]} $, {result[1]}kg)")
-            print(f"Best Result:\t\t{swarm._bestPosition} -> {result[2]}")
-            print(f"Best Fitness:\t\t{swarm._bestPositionFitness} in {idx}th iteration out of {self._generations}")
-            print(f"Size left in knapsack:\t{(knapsackSize - result[1])} kg")
+            print(f"average max weight ${max_weight_sum / 30}")
             print("===================================================================")
 
         def getKnapsackResult(self, items, bestPosition):

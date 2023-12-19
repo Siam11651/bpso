@@ -5,7 +5,11 @@ if __name__ == "__main__":
     # problem = CPSOProblem("gbest")
     # problem = CBPSOProblem("lbest")
     # problem = BPSOKnapsackProblem()
-    problem = TVBPSOKnapsackProblem()
+    # problem = TVBPSOKnapsackProblem()
     # problem = BPSOTSPProblem()
 
-    problem.plotResults()
+    # problem.plotResults()
+    print("time invariant...")
+    BPSOKnapsackProblem()
+    print("time variant...")
+    TVBPSOKnapsackProblem()
